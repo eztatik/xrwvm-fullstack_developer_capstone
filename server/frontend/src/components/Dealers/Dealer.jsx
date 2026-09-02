@@ -11,18 +11,16 @@ import Header from '../Header/Header';
 const Dealer = () => {
 
 
-  const [dealer, setDealer] = useState({});
+  const [dealer, setDealer] = useState(null);
   const [reviews, setReviews] = useState([]);
   const [unreviewed, setUnreviewed] = useState(false);
   const [postReview, setPostReview] = useState(<></>)
 
-  let curr_url = window.location.href;
-  let root_url = curr_url.substring(0,curr_url.indexOf("dealer"));
   let params = useParams();
   let id =params.id;
-  let dealer_url = root_url+`djangoapp/dealer/${id}`;
-  let reviews_url = root_url+`djangoapp/reviews/dealer/${id}`;
-  let post_review = root_url+`postreview/${id}`;
+  let dealer_url = `/djangoapp/dealer/${id}`;
+  let reviews_url = `/djangoapp/reviews/dealer/${id}`;
+  let post_review = `/postreview/${id}`;
   
   const get_dealer = async ()=>{
     const res = await fetch(dealer_url, {
@@ -32,7 +30,9 @@ const Dealer = () => {
     
     if(retobj.status === 200) {
       let dealerobjs = Array.from(retobj.dealer)
-      setDealer(dealerobjs[0])
+      if(dealerobjs[0]) {
+        setDealer(dealerobjs[0])
+      }
     }
   }
 
@@ -71,8 +71,8 @@ return(
   <div style={{margin:"20px"}}>
       <Header/>
       <div style={{marginTop:"10px"}}>
-      <h1 style={{color:"grey"}}>{dealer.full_name}{postReview}</h1>
-      <h4  style={{color:"grey"}}>{dealer['city']},{dealer['address']}, Zip - {dealer['zip']}, {dealer['state']} </h4>
+        <h1 style={{color:"grey"}}>{dealer && dealer.full_name}{postReview}</h1>      
+        <h4  style={{color:"grey"}}>{dealer && `${dealer.city}, ${dealer.address}, Zip - ${dealer.zip}, ${dealer.state}`}</h4>
       </div>
       <div class="reviews_panel">
       {reviews.length === 0 && unreviewed === false ? (

@@ -5,6 +5,7 @@ import "../assets/style.css";
 import Header from '../Header/Header';
 
 
+
 const PostReview = () => {
   const [dealer, setDealer] = useState({});
   const [review, setReview] = useState("");
@@ -13,13 +14,11 @@ const PostReview = () => {
   const [date, setDate] = useState("");
   const [carmodels, setCarmodels] = useState([]);
 
-  let curr_url = window.location.href;
-  let root_url = curr_url.substring(0,curr_url.indexOf("postreview"));
   let params = useParams();
   let id =params.id;
-  let dealer_url = root_url+`djangoapp/dealer/${id}`;
-  let review_url = root_url+`djangoapp/add_review`;
-  let carmodels_url = root_url+`djangoapp/get_cars`;
+  let dealer_url = `/djangoapp/dealer/${id}`;
+  let review_url = `/djangoapp/add_review`;
+  let carmodels_url = `/djangoapp/get_cars`;
 
   const postreview = async ()=>{
     let name = sessionStorage.getItem("firstname")+" "+sessionStorage.getItem("lastname");
@@ -57,8 +56,9 @@ const PostReview = () => {
   });
 
   const json = await res.json();
+  console.log("post review response:", json);
   if (json.status === 200) {
-      window.location.href = window.location.origin+"/dealer/"+id;
+      window.location.href = window.location.origin+"/dealer/"+id+"/";
   }
 
   }
